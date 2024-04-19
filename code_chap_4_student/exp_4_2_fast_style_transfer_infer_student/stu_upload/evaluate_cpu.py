@@ -47,7 +47,7 @@ class ResBlock(nn.Module):
     def __init__(self, c):
         super(ResBlock, self).__init__()
         self.layer = nn.Sequential(
-            
+
             #TODO: 进行卷积，卷积核为3*1*1
             nn.Conv2d(c, c,3,1,1,bias=False),
             # ______________________________________________
@@ -64,7 +64,7 @@ class ResBlock(nn.Module):
             nn.InstanceNorm2d(c),
             # ______________________________________________
         )
-        
+
     def forward(self, x):
         #TODO: 返回残差运算的结果
         Fx = self.layer(x)
@@ -164,6 +164,6 @@ if __name__ == '__main__':
         print("Inference (CPU) processing time: %s" % delta_time)
         #TODO: 利用save_image函数将tensor形式的生成图像image_g以及输入图像image_c以jpg格式左右拼接的形式保存在/out/cpu/文件夹下
         concatenated_image = torch.cat((image_g, image_c), dim=3)
-        save_image(concatenated_image,'./out/cpu/output.jpg',)
+        save_image(concatenated_image,'./out/cpu/',)
         # _________________________________________
     print("TEST RESULT PASS!\n")
