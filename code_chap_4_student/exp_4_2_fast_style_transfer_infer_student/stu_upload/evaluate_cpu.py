@@ -121,7 +121,7 @@ class TransNet(nn.Module):
             #TODO: 执行卷积操作
             nn.Conv2d(64,32,3,1,1,bias=False),
             #TODO: 实例归一化
-            nn.Upsample(scale_factor=2,mode='nearest'),
+            nn.InstanceNorm2d(32),
             #TODO: 执行ReLU操作
             nn.ReLU(),
 
@@ -163,7 +163,7 @@ if __name__ == '__main__':
         delta_time = end - start
         print("Inference (CPU) processing time: %s" % delta_time)
         #TODO: 利用save_image函数将tensor形式的生成图像image_g以及输入图像image_c以jpg格式左右拼接的形式保存在/out/cpu/文件夹下
-        concatenated_image = torch.cat((image_g, image_c), dim=2)
+        concatenated_image = torch.cat((image_g, image_c), dim=3)
         save_image(concatenated_image,'./out/cpu/output.jpg',)
         # _________________________________________
     print("TEST RESULT PASS!\n")
