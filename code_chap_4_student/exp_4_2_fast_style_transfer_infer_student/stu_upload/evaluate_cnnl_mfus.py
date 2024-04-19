@@ -204,6 +204,6 @@ if __name__ == '__main__':
         print("Inference (mfus) processing time: %s" % delta_time)
         #TODO: 利用save_image函数将tensor形式的生成图像image_g_mlu以及输入图像image_c以jpg格式左右拼接的形式保存在/out/mlu_cnnl_mfus/文件夹下
         concatenated_image = torch.cat((image_g_mlu, image_c), dim=3)
-        save_image(concatenated_image,'./out/mlu_cnnl_mfus',)
+        save_image(concatenated_image,'./out/mlu_cnnl_mfus/'+str(i)+'.jpg',)
         # _________________________________________
     print("TEST RESULT PASS!\n")
