@@ -29,10 +29,10 @@ class COCODataSet(Dataset):
         image = cv2.imdecode(image, cv2.IMREAD_COLOR)
         # ______________________________________________
         # TODO: 使用cv2.resize()将图像缩放为512*512大小，其中所采用的插值方式为：区域插值
-        cv2.resize(image,(512,512),interpolation=cv2.INTER_AREA)
+        image = cv2.resize(image,(512,512),interpolation=cv2.INTER_AREA)
         # ______________________________________________
         # TODO: 使用cv2.cvtColor将图片从BGR格式转换成RGB格式
-        cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         # ______________________________________________
         # TODO: 将image从numpy形式转换为torch.float32,并将其归一化为[0,1]
         image =torch.from_numpy(image).to(torch.float32)
@@ -69,7 +69,7 @@ class ResBlock(nn.Module):
         #TODO: 返回残差运算的结果
         Fx = self.layer(x)
         Hx = Fx + x
-        return nn.ReLU(Hx)
+        return nn.ReLU()(Hx)
         # _________________________________________
 
 
@@ -127,13 +127,14 @@ class TransNet(nn.Module):
 
             ###############输出层#####################
             #TODO: 执行卷积操作
-            nn.Conv2d(64,3,9,1,4,bias=False),
+            nn.Conv2d(32,3,9,1,4,),
             #TODO： sigmoid激活函数
             nn.Sigmoid()
         )
 
 
     def forward(self, x):
+
         return self.layer(x)
     
 
@@ -142,7 +143,8 @@ if __name__ == '__main__':
     # TODO: 使用cpu生成图像转换网络模型并保存在g_net中
     g_net = TransNet()
     # TODO:从/models文件夹下加载网络参数到g_net中
-    g_net.load_state_dict('./models')
+    ckpt = torch.load('./models/fst.pth')
+    g_net.load_state_dict(ckpt)
     print("g_net build  PASS!\n")
     data_set = COCODataSet()
     print("load COCODataSet PASS!\n")
@@ -155,10 +157,13 @@ if __name__ == '__main__':
         #print(image_c.shape)
         start = time.time()
         # TODO: 计算 g_net,得到image_g
-        _________________________________________
+        image_g = g_net(image_c)
+        # _________________________________________
         end = time.time()
         delta_time = end - start
         print("Inference (CPU) processing time: %s" % delta_time)
         #TODO: 利用save_image函数将tensor形式的生成图像image_g以及输入图像image_c以jpg格式左右拼接的形式保存在/out/cpu/文件夹下
-        _________________________________________
+        concatenated_image = torch.cat((image_g, image_c), dim=2)
+        save_image(concatenated_image,'./out/cpu/output.jpg',)
+        # _________________________________________
     print("TEST RESULT PASS!\n")
