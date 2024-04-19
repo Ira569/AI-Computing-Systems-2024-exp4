@@ -175,7 +175,7 @@ if __name__ == '__main__':
     ckpt = torch.load('./models/fst.pth')
     print("g_net build PASS!\n")
     # TODO：将g_net模型转化为eval,并转化为浮点类型，输出得到net
-    net = g_net.eval().to(float)
+    net = g_net.eval().to(torch.float32)
     # _________________________________________
     data_set = COCODataSet()
     print("load COCODataSet PASS!\n")
